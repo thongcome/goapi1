@@ -20,7 +20,7 @@ func main() {
 	e.GET("/hello", helloHandler)
 
 	e.GET("/getTodos", getTodosHandler)
-	e.POST("/getTodos", getTodosHandler)
+	e.POST("/getTodos", createTodosHandler)
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
 	log.Println("port", port)
