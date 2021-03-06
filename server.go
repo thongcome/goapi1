@@ -20,6 +20,7 @@ func main() {
 	e.GET("/hello", helloHandler)
 
 	e.GET("/getTodos", getTodosHandler)
+	e.POST("/getTodos", getTodosHandler)
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
 	log.Println("port", port)
@@ -34,6 +35,23 @@ func main() {
 // 	for
 // 	return nil
 // }
+func createTodosHandler(c echo.Context) error {
+	items := []*inventory{}
+	// if err := e.JSON(http.StatusBadRequest,map[string]string {"error":err.Error()})
+	for i := 1; i < 6; i++ {
+		str := "00"
+		str2 := strconv.Itoa(i)
+		str = str + str2
+		item := &inventory{
+			ID:     str,
+			Status: "processing",
+			Name:   "Notebook",
+		}
+		items = append(items, item)
+	}
+
+	return c.JSON(http.StatusCreated, "Create inventory done")
+}
 
 func getTodosHandler(c echo.Context) error {
 	items := []*inventory{}
