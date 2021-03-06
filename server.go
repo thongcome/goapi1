@@ -50,7 +50,7 @@ func createTodosHandler(c echo.Context) error {
 		items = append(items, item)
 	}
 
-	return c.JSON(http.StatusCreated, "Create inventory done")
+	return c.JSON(http.StatusCreated, items)
 }
 
 func getTodosHandler(c echo.Context) error {
