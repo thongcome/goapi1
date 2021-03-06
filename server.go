@@ -21,7 +21,7 @@ func main() {
 
 	e.GET("/getTodos", getTodosHandler)
 
-	e.GET("/getTodos/:id", getTodosHandler)
+	e.GET("/getTodos/:id", getByIDHandler)
 	e.POST("/getTodos", createTodosHandler)
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
