@@ -20,6 +20,8 @@ func main() {
 	e.GET("/hello", helloHandler)
 
 	e.GET("/getTodos", getTodosHandler)
+
+	e.GET("/getTodos/:id", getTodosHandler)
 	e.POST("/getTodos", createTodosHandler)
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
@@ -70,6 +72,36 @@ func getTodosHandler(c echo.Context) error {
 	// items = append(items, item)
 
 	return c.JSON(http.StatusOK, items)
+
+}
+
+func getByIDHandler(c echo.Context) error {
+	var id int
+	err := echo.PathParamsBinder(c).Int("id", &id).BindError()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	items := []*inventory{}
+
+	for i := 1; i < 6; i++ {
+		str := "00"
+		str2 := strconv.Itoa(i)
+		str = str + str2
+		item := &inventory{
+			ID:     str,
+			Status: "processing" + str2,
+			Name:   "Notebook" + str2,
+		}
+		items = append(items, item)
+	}
+	t := items[id]
+	// if !ok {
+	// 	return c.JSON(http.StatusOK, map[int]*inventory{})
+	// }
+
+	// items = append(items, item)
+
+	return c.JSON(http.StatusOK, t)
 
 }
 
