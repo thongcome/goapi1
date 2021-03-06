@@ -35,15 +35,23 @@ func main() {
 // }
 
 func getTodosHandler(c echo.Context) error {
-	var items []*inventory
-
-	item := &inventory{
-		ID:     "001",
-		Status: "processing",
-		Name:   "Notebook",
+	items := []*inventory{
+		&inventory{
+			ID:     "001",
+			Status: "processing",
+			Name:   "Notebook",
+		},
+		&inventory{
+			ID:     "001",
+			Status: "processing",
+			Name:   "Notebook",
+		},
+		&inventory{
+			ID:     "001",
+			Status: "processing",
+			Name:   "Notebook",
+		},
 	}
-
-	items = append(items, item)
 
 	return c.JSON(http.StatusOK, items)
 
