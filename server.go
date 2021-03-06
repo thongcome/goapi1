@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 )
@@ -35,23 +36,20 @@ func main() {
 // }
 
 func getTodosHandler(c echo.Context) error {
-	items := []*inventory{
-		&inventory{
-			ID:     "001",
+	items := []*inventory{}
+
+	for i := 1; i < 6; i++ {
+		str := "00"
+		str2 := strconv.Itoa(i)
+		str = str + str2
+		item := &inventory{
+			ID:     str,
 			Status: "processing",
 			Name:   "Notebook",
-		},
-		&inventory{
-			ID:     "001",
-			Status: "processing",
-			Name:   "Notebook",
-		},
-		&inventory{
-			ID:     "001",
-			Status: "processing",
-			Name:   "Notebook",
-		},
+		}
+		items = append(items, item)
 	}
+	// items = append(items, item)
 
 	return c.JSON(http.StatusOK, items)
 
