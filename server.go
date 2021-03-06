@@ -9,9 +9,9 @@ import (
 )
 
 type inventory struct {
-	id     string
-	status string
-	name   string
+	ID     string `json:"id"`
+	Status string `json:"status"`
+	Name   string `json:"name"`
 }
 
 func main() {
@@ -27,14 +27,25 @@ func main() {
 
 }
 
+// func getTodo2Handler(c echo.Context) error {
+// 	item := []*inventory{}
+
+// 	for
+// 	return nil
+// }
+
 func getTodosHandler(c echo.Context) error {
-	return c.JSON(http.StatusOK, map[int]*inventory{
-		1: &inventory{
-			id:     "001",
-			status: "processing",
-			name:   "Notebook",
-		},
-	})
+	var items []*inventory
+
+	item := &inventory{
+		ID:     "001",
+		Status: "processing",
+		Name:   "Notebook",
+	}
+
+	items = append(items, item)
+
+	return c.JSON(http.StatusOK, items)
 
 }
 
