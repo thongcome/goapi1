@@ -25,6 +25,7 @@ func main() {
 	e.GET("/getTodos", getTodosHandler)
 
 	e.GET("/getTodos/:id", getByIDHandler)
+	e.GET("/getDBByID/:id", getDBByIDHandler)
 	e.POST("/getTodos", createTodosHandler)
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
