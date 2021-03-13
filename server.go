@@ -158,7 +158,7 @@ func getAllDBHandler(c echo.Context) error {
 	}
 	defer db.Close()
 
-	stmt, err := db.Prepare("SELECT id, title, status FROM todos order by id")
+	stmt, err := db.Prepare("SELECT id, title, status FROM todos order by id desc")
 	if err != nil {
 		log.Fatal("can't prepare query all todos statment", err)
 	}
