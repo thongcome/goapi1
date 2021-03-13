@@ -29,6 +29,7 @@ func main() {
 	e.GET("/getDBByID/:id", getDBByIDHandler)
 	e.POST("/getTodos", createTodosHandler)
 	e.POST("/insertData", insertDataHandler)
+	e.POST("/updateData", updateDataHandler)
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
 	log.Println("port", port)
