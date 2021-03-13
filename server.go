@@ -1,12 +1,15 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+	_ "github.com/lib/pq"
 )
 
 type inventory struct {
@@ -102,6 +105,33 @@ func getByIDHandler(c echo.Context) error {
 	// items = append(items, item)
 
 	return c.JSON(http.StatusOK, t)
+
+}
+
+func getDBByIDHandler(c echo.Context) error {
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatal("Connect to database error", err)
+	}
+	defer db.Close()
+
+	stmt, err := db.Prepare("SELECT id, title, status FROM todos where id=$1")
+	if err != nil {
+		log.Fatal("can'tprepare query one row statment", err)
+	}
+
+	rowId := 1
+	row := stmt.QueryRow(rowId)
+	var id int
+	var title, status string
+
+	err = row.Scan(&id, &title, &status)
+	if err != nil {
+		log.Fatal("can't Scan row into variables", err)
+	}
+
+	fmt.Println("one row", id, title, status)
+	return c.JSON(http.StatusOK, row)
 
 }
 
