@@ -23,10 +23,12 @@ func main() {
 	e.GET("/hello", helloHandler)
 
 	e.GET("/getTodos", getTodosHandler)
+	e.GET("/all", getAllDBHandler)
 
 	e.GET("/getTodos/:id", getByIDHandler)
 	e.GET("/getDBByID/:id", getDBByIDHandler)
 	e.POST("/getTodos", createTodosHandler)
+
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
 	log.Println("port", port)
@@ -144,6 +146,46 @@ func getDBByIDHandler(c echo.Context) error {
 
 	fmt.Println("one row", id, title, status)
 	return c.JSON(http.StatusOK, item)
+
+}
+
+func getAllDBHandler(c echo.Context) error {
+
+	items := []*inventory{}
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatal("Connect to database error", err)
+	}
+	defer db.Close()
+
+	stmt, err := db.Prepare("SELECT id, title, status FROM todos")
+	if err != nil {
+		log.Fatal("can't prepare query all todos statment", err)
+	}
+
+	rows, err := stmt.Query()
+	if err != nil {
+		log.Fatal("can't query all todos", err)
+	}
+	for rows.Next() {
+		var id int
+		var title, status string
+		err := rows.Scan(&id, &title, &status)
+		if err != nil {
+			log.Fatal("can't Scan row into variable", err)
+		}
+		fmt.Println(id, title, status)
+		item := &inventory{
+			ID:     strconv.Itoa(id),
+			Status: title,
+			Name:   status,
+		}
+
+		items = append(items, item)
+	}
+
+	fmt.Println("query all todos success")
+	return c.JSON(http.StatusOK, items)
 
 }
 
