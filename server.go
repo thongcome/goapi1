@@ -214,7 +214,7 @@ func insertDataHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, id)
 }
 
-func updateData(c echo.Context) error {
+func updateDataHandler(c echo.Context) error {
 
 	item := inventory{}
 	err := c.Bind(&item)
