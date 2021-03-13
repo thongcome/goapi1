@@ -130,9 +130,14 @@ func getDBByIDHandler(c echo.Context) error {
 	if err != nil {
 		log.Fatal("can't Scan row into variables", err)
 	}
+	item := &inventory{
+		ID:     strconv.Itoa(id),
+		Status: title,
+		Name:   status,
+	}
 
 	fmt.Println("one row", id, title, status)
-	return c.JSON(http.StatusOK, row)
+	return c.JSON(http.StatusOK, item)
 
 }
 
