@@ -192,7 +192,6 @@ func getAllDBHandler(c echo.Context) error {
 func insertDataHandler(c echo.Context) error {
 	item := inventory{}
 	err := c.Bind(&item)
-
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -212,6 +211,38 @@ func insertDataHandler(c echo.Context) error {
 
 	fmt.Println("insert todo success id : ", id)
 	return c.JSON(http.StatusOK, id)
+}
+
+func updateData(c echo.Context) error {
+
+	item := inventory{}
+	err := c.Bind(&item)
+	if item.ID == "" {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatal("Connect to database error", err)
+	}
+	defer db.Close()
+
+	stmt, err := db.Prepare("UPDATE todos SET status=$2 , name=$3 WHERE id=$1;")
+
+	if err != nil {
+		log.Fatal("can't prepare statment update", err)
+	}
+	int1, err := strconv.ParseInt(item.ID, 6, 12)
+
+	if _, err := stmt.Exec(int1, item.Status, item.Name); err != nil {
+		log.Fatal("error execute update ", err)
+	}
+
+	fmt.Println("insert todo success id : ", int1)
+	return c.JSON(http.StatusOK, item)
+
 }
 
 func helloHandler(c echo.Context) error {
