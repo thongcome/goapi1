@@ -110,6 +110,12 @@ func getByIDHandler(c echo.Context) error {
 }
 
 func getDBByIDHandler(c echo.Context) error {
+	var id int
+	err := echo.PathParamsBinder(c).Int("id", &id).BindError()
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal("Connect to database error", err)
@@ -121,9 +127,9 @@ func getDBByIDHandler(c echo.Context) error {
 		log.Fatal("can'tprepare query one row statment", err)
 	}
 
-	rowId := 1
+	rowId := id
 	row := stmt.QueryRow(rowId)
-	var id int
+
 	var title, status string
 
 	err = row.Scan(&id, &title, &status)
