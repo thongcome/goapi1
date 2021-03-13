@@ -28,7 +28,7 @@ func main() {
 	e.GET("/getTodos/:id", getByIDHandler)
 	e.GET("/getDBByID/:id", getDBByIDHandler)
 	e.POST("/getTodos", createTodosHandler)
-
+	e.POST("/insertData", insertDataHandler)
 	// e.Start(":1234")
 	port := os.Getenv("PORT")
 	log.Println("port", port)
@@ -187,6 +187,31 @@ func getAllDBHandler(c echo.Context) error {
 	fmt.Println("query all todos success")
 	return c.JSON(http.StatusOK, items)
 
+}
+
+func insertDataHandler(c echo.Context) error {
+	item := inventory{}
+	err := c.Bind(&item)
+
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatal("Connect to database error", err)
+	}
+	defer db.Close()
+
+	row := db.QueryRow("INSERT INTO todos (title, status) values ($1, $2)  RETURNING id", item.Name, item.Status)
+	var id int
+	err = row.Scan(&id)
+	if err != nil {
+		fmt.Println("can't scan id", err)
+		return err
+	}
+
+	fmt.Println("insert todo success id : ", id)
+	return c.JSON(http.StatusOK, id)
 }
 
 func helloHandler(c echo.Context) error {
