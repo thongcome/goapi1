@@ -224,24 +224,24 @@ func updateDataHandler(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatal("Connect to database error", err)
-	}
-	defer db.Close()
+	// db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	// if err != nil {
+	// 	log.Fatal("Connect to database error", err)
+	// }
+	// defer db.Close()
 
-	stmt, err := db.Prepare("UPDATE todos SET status=$2 , name=$3 WHERE id=$1;")
+	// stmt, err := db.Prepare("UPDATE todos SET status=$2 , name=$3 WHERE id=$1;")
 
-	if err != nil {
-		log.Fatal("can't prepare statment update", err)
-	}
-	int1, err := strconv.ParseInt(item.ID, 6, 12)
+	// if err != nil {
+	// 	log.Fatal("can't prepare statment update", err)
+	// }
+	// int1, err := strconv.ParseInt(item.ID, 6, 12)
 
-	if _, err := stmt.Exec(int1, item.Status, item.Name); err != nil {
-		log.Fatal("error execute update ", err)
-	}
+	// if _, err := stmt.Exec(int1, item.Status, item.Name); err != nil {
+	// 	log.Fatal("error execute update ", err)
+	// }
 
-	fmt.Println("insert todo success id : ", int1)
+	// fmt.Println("insert todo success id : ", int1)
 	return c.JSON(http.StatusOK, item)
 
 }
